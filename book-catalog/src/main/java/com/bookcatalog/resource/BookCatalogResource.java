@@ -23,10 +23,10 @@ public class BookCatalogResource {
 	@RequestMapping("/{userId}")
 	public List<CatalogItem> getBookCatalog(@PathVariable("userId") String userId) {
 		
-		UserRating ratings = restTemplate.getForObject("http://localhost:8083/rating/users/"+userId, UserRating.class);
+		UserRating ratings = restTemplate.getForObject("http://book-rating/rating/users/"+userId, UserRating.class);
 		
 		return ratings.getRating().stream().map(rating -> {
-			Book book = restTemplate.getForObject("http://localhost:8084/info/"+rating.getBookId(), Book.class);
+			Book book = restTemplate.getForObject("http://book-info/info/"+rating.getBookId(), Book.class);
 			return new CatalogItem(book.getBookName(), book.getAuthor(), rating.getRating());
 		})
 		.collect(Collectors.toList());
